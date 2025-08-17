@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "chunklockutils",
+  "version": "${version}",
+  "name": "ChunklockUtils",
+  "description": "Adds various QOL features to the Epicworld Chunklock gamemode",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/chunklockutils/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.combi.chunklockutils.client.ChunklockutilsClient"
+    ],
+    "main": [
+      "dev.combi.chunklockutils.Chunklockutils"
+    ]
+  },
+  "mixins": [
+    "chunklockutils.mixins.json",
+    {
+      "config": "chunklockutils.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
