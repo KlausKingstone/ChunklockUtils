@@ -13,36 +13,38 @@ import java.util.Optional;
 
 public final class EvolvingTooltip {
 	public static void rewriteTooltip(ItemStack stack, List<Text> lines) {
-		// Only target Evolving Tools
+		// Only check Evolving tools
 		if (!stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolving")) return;
 
-		Optional<Double> scalable = getScalableValue(stack);
-		if (scalable.isEmpty()) return;
+		Optional<Double> scalableOpt = getScalableValue(stack);
+		if (scalableOpt.isEmpty()) return;
+		double scalable = scalableOpt.get();
 
-		String newVal = formatNumber(scalable.get());
-
-		// Replace line immediately after a "LEVEL UP" line
 		for (int i = 1; i < lines.size(); i++) {
 			String prev = lines.get(i - 1).getString().trim();
 			if (!prev.contains("LEVEL UP")) continue;
 
 			Text line = lines.get(i);
 			String plain = line.getString();
+
 			int slash = plain.indexOf('/');
-			if (slash > 0) {
-				int end = slash;
-				int pos = end - 1;
-				while (pos >= 0) {
-					char c = plain.charAt(pos);
-					if (Character.isDigit(c) || c == '.' || c == ',') pos--;
-					else break;
-				}
-				int start = pos + 1;
-				if (start < end) {
-					String oldNum = plain.substring(start, end);
-					lines.set(i, TextReplace.replaceFirstPreservingStyle(line, oldNum, newVal));
-				}
+			if (slash <= 0) continue;
+
+			int firstEnd = slash;
+			int p = firstEnd - 1;
+			while (p >= 0) {
+				char c = plain.charAt(p);
+				if (Character.isDigit(c) || c == '.' || c == ',') p--;
+				else break;
 			}
+			int firstStart = p + 1;
+			if (firstStart >= firstEnd) continue;
+			String firstNumOld = plain.substring(firstStart, firstEnd);
+
+			String firstNew = formatNumber(scalable);
+
+			String oldNum = plain.substring(firstStart, firstEnd);
+			lines.set(i, TextReplace.replaceFirstPreservingStyle(line, oldNum, firstNew));
 			return;
 		}
 	}
@@ -88,4 +90,12 @@ public final class EvolvingTooltip {
 		if (s.contains(".")) s = s.replaceAll("\\.?0+$", "");
 		return s;
 	}
+
+	private static double parseNumber(String s) {
+		// tolerate "1,234" and "1234"
+		String t = s.replace(",", "").trim();
+		try { return Double.parseDouble(t); } catch (Exception e) { return 0; }
+	}
+
+	private static double clamp(double v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
 }

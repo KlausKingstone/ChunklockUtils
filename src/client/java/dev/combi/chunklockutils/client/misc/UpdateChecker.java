@@ -8,6 +8,7 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -82,14 +83,29 @@ public final class UpdateChecker {
 
 	private static void notify(MinecraftClient client, String modId, String latest, String url) {
 		if (client.player == null) return;
-		var base = Text.literal("[" + modId + "] Update available: v" + latest).styled(s -> s.withColor(0x55FF55));
-		var link = Text.literal("  [Open]").styled(s -> s.withUnderline(true).withColor(0x00AAFF)
-				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
-				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(url))));
-		client.player.sendMessage(base.copy().append(link), false);
 
-		SystemToast.add(client.getToastManager(), SystemToast.Type.PERIODIC_NOTIFICATION,
-				Text.literal(modId + " update"), Text.literal("New version: v" + latest));
+		Text msg = Text.empty()
+				.append(Text.literal("["))
+				.append(Text.literal("ChunklockUtils")
+						.styled(s -> s.withBold(true).withColor(0x00FFC8))) // cyan-ish accent
+				.append(Text.literal("] ").styled(s -> s.withColor(0x555555)))
+				.append(Text.literal("Update available ").styled(s -> s.withColor(0xAAAAAA)))
+				.append(Text.literal("v" + latest)
+						.styled(s -> s.withBold(true).withColor(0x55FF55)))
+				.append(Text.literal("  •  ").styled(s -> s.withColor(0x777777)))
+				.append(Text.literal("[Open]")
+						.styled(s -> s.withUnderline(true).withColor(0x00AAFF)
+								.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+								.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										Text.literal("Open release page\n").append(Text.literal(url).formatted(Formatting.GRAY))))))
+				.append(Text.literal(" "))
+				.append(Text.literal("[Copy URL]")
+						.styled(s -> s.withUnderline(true).withColor(0xBBBBBB)
+								.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url))
+								.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										Text.literal("Copy link to clipboard")))));
+
+		client.player.sendMessage(msg, false);
 	}
 
 	private static String stripV(String s) {
