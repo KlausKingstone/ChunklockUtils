@@ -1,7 +1,8 @@
 package dev.combi.chunklockutils.client;
 
-import dev.combi.chunklockutils.client.config.CluConfig;
-import dev.combi.chunklockutils.client.config.CluConfigScreen;
+import dev.combi.chunklockutils.client.config.ConfigManager;
+import dev.combi.chunklockutils.client.config.ConfigScreen;
+import dev.combi.chunklockutils.client.features.EventsReminder;
 import dev.combi.chunklockutils.client.features.EvolvingProgressBar;
 import dev.combi.chunklockutils.client.features.EvolvingTooltip;
 import dev.combi.chunklockutils.client.misc.UpdateChecker;
@@ -35,7 +36,7 @@ public class ChunklockutilsClient implements ClientModInitializer {
 
 
 		// Config handling
-		CluConfig.load();
+		ConfigManager.load();
 		openConfig = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"key.chunklockutils.config",
 				InputUtil.Type.KEYSYM,
@@ -45,7 +46,7 @@ public class ChunklockutilsClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (openConfig.wasPressed()) {
-				MinecraftClient.getInstance().setScreen(new CluConfigScreen(MinecraftClient.getInstance().currentScreen));
+				MinecraftClient.getInstance().setScreen(new ConfigScreen(MinecraftClient.getInstance().currentScreen));
 			}
 		});
 
@@ -53,6 +54,9 @@ public class ChunklockutilsClient implements ClientModInitializer {
 		ItemTooltipCallback.EVENT.register((stack, ctx, type, lines) -> {
 			EvolvingTooltip.rewriteTooltip(stack, lines);
 		});
+
+		// Add event notifications
+		EventsReminder.init();
 
 		// Add progress bar to Evolving tools
 		HudRenderCallback.EVENT.register(EvolvingProgressBar::renderHotbar);

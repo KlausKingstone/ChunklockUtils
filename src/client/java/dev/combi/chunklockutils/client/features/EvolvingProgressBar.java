@@ -1,6 +1,6 @@
 package dev.combi.chunklockutils.client.features;
 
-import dev.combi.chunklockutils.client.config.CluConfig;
+import dev.combi.chunklockutils.client.config.ConfigManager;
 import dev.combi.chunklockutils.client.mixin.HandledScreenAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -47,28 +47,37 @@ public final class EvolvingProgressBar {
 	}
 
 	public static void renderHotbar(DrawContext ctx, RenderTickCounter tickCounter) {
-		if (!CluConfig.get().showEvolvedProgressBar) return;
+		if (!ConfigManager.get().showEvolvedProgressBar) return;
+
 		var mc = MinecraftClient.getInstance();
-		if (mc.player == null || mc.options.hudHidden) return;
-
-		int sel = mc.player.getInventory().selectedSlot;
-		ItemStack stack = mc.player.getInventory().getStack(sel);
-		if (stack.isEmpty() || !isEvolving(stack)) return;
-
-		var current = readScalable(stack);
-		var target  = readTargetFromLore(stack);
-		if (current.isEmpty() || target.isEmpty()) return;
-
-		double pct = clamp(current.get() / Math.max(1d, target.get()));
+		if (mc.player == null || mc.options.hudHidden || mc.currentScreen != null) return;
 
 		int sw = mc.getWindow().getScaledWidth();
 		int sh = mc.getWindow().getScaledHeight();
 		int baseX = sw / 2 - 91;
 		int baseY = sh - 22;
-		int slotX = baseX + sel * 20 + 2;
-		int slotY = baseY + 2;
 
-		drawBar(ctx, slotX, slotY, pct);
+		var m = ctx.getMatrices();
+		m.push();
+		m.translate(0, 0, 1000);
+
+		for (int i = 0; i < 9; i++) {
+			ItemStack stack = mc.player.getInventory().getStack(i);
+
+			if (stack.isEmpty() || !isEvolving(stack)) continue;
+
+			var current = readScalable(stack);
+			var target  = readTargetFromLore(stack);
+			if (current.isEmpty() || target.isEmpty()) continue;
+
+			double pct = current.get() / Math.max(1d, target.get());
+			if (pct < 0) pct = 0; else if (pct > 1) pct = 1;
+
+			int slotX = baseX + i * 20 + 2;
+			int slotY = baseY + 2;
+			drawBar(ctx, slotX, slotY, pct);
+		}
+		m.pop();
 	}
 
 	private static void drawBar(DrawContext ctx, int slotX, int slotY, double pct) {

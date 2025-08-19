@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
@@ -50,7 +49,7 @@ public final class UpdateChecker {
 
 					if (isNewer(latestTag, currentTag)) {
 						client.execute(() -> notify(client, modId, latestTag, latest.url));
-						notifiedThisSession = true; // <- only once per run
+						notifiedThisSession = true;
 					}
 				});
 	}
@@ -87,8 +86,8 @@ public final class UpdateChecker {
 		Text msg = Text.empty()
 				.append(Text.literal("["))
 				.append(Text.literal("ChunklockUtils")
-						.styled(s -> s.withBold(true).withColor(0x00FFC8))) // cyan-ish accent
-				.append(Text.literal("] ").styled(s -> s.withColor(0x555555)))
+						.styled(s -> s.withBold(true).withColor(0x00FFC8)))
+				.append(Text.literal("] "))
 				.append(Text.literal("Update available ").styled(s -> s.withColor(0xAAAAAA)))
 				.append(Text.literal("v" + latest)
 						.styled(s -> s.withBold(true).withColor(0x55FF55)))
@@ -112,7 +111,6 @@ public final class UpdateChecker {
 		return s != null && (s.startsWith("v") || s.startsWith("V")) ? s.substring(1) : s;
 	}
 
-	// very lenient semver-ish compare (1.10.0 > 1.2.9)
 	private static boolean isNewer(String latest, String current) {
 		int[] a = split(latest), b = split(current);
 		for (int i = 0; i < Math.max(a.length, b.length); i++) {

@@ -6,16 +6,21 @@ import com.google.gson.GsonBuilder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class CluConfig {
+public final class ConfigManager {
 	private static final Path PATH = Path.of("config", "chunklockutils.json");
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static CluConfig INSTANCE;
+	private static ConfigManager INSTANCE;
+
+	/* ==== Event Notifications ==== */
+	public boolean notifyCrabRave = true;
+	public boolean notifyEnvoy    = true;
+	public boolean notifyChatEvents = true;
 
 	public boolean showEvolvedProgressBar = true;
 
-	private CluConfig() {}
+	private ConfigManager() {}
 
-	public static CluConfig get() {
+	public static ConfigManager get() {
 		if (INSTANCE == null) load();
 		return INSTANCE;
 	}
@@ -23,10 +28,10 @@ public final class CluConfig {
 	public static void load() {
 		try {
 			if (Files.exists(PATH)) {
-				INSTANCE = GSON.fromJson(Files.readString(PATH), CluConfig.class);
+				INSTANCE = GSON.fromJson(Files.readString(PATH), ConfigManager.class);
 			}
 		} catch (Exception ignored) {}
-		if (INSTANCE == null) INSTANCE = new CluConfig();
+		if (INSTANCE == null) INSTANCE = new ConfigManager();
 	}
 
 	public static void save() {

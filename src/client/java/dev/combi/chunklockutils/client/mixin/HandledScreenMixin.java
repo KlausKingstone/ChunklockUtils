@@ -1,6 +1,6 @@
 package dev.combi.chunklockutils.client.mixin;
 
-import dev.combi.chunklockutils.client.config.CluConfig;
+import dev.combi.chunklockutils.client.config.ConfigManager;
 import dev.combi.chunklockutils.client.features.EvolvingProgressBar;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -16,7 +16,7 @@ public abstract class HandledScreenMixin {
 			at = @At("TAIL")
 	)
 	private void chunklockutils$afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		if (!CluConfig.get().showEvolvedProgressBar) return;
+		if (!ConfigManager.get().showEvolvedProgressBar) return;
 		EvolvingProgressBar.renderGui((HandledScreen<?>)(Object)this, context);
 	}
 }
