@@ -17,6 +17,7 @@ public final class ConfigManager {
 	public boolean notifyChatEvents = true;
 
 	public boolean showEvolvedProgressBar = true;
+	public boolean smallHand = false;
 
 	private ConfigManager() {}
 

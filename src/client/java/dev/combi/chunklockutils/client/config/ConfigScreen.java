@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 public class ConfigScreen extends Screen {
 	private final Screen parent;
 	private ButtonWidget evotoggleBtn;
+	private ButtonWidget smallHandBtn;  // NEW
 	private ButtonWidget crabBtn;
 	private ButtonWidget envoyBtn;
 	private ButtonWidget chatBtn;
@@ -22,53 +23,83 @@ public class ConfigScreen extends Screen {
 
 	@Override
 	protected void init() {
-		int cx = this.width / 2;
-		int cy = this.height / 2;
+		int cx   = this.width / 2;
+		int w    = 200;
+		int h    = 20;
+		int gap  = 6;
+		int step = h + gap;
 
+		int top  = Math.max(24, this.height / 2 - 90);
+		int y    = top;
+
+		// --- General ---
+		// Evolved tools toggle
 		evotoggleBtn = ButtonWidget.builder(currentLabel(), b -> {
-			ConfigManager cfg = ConfigManager.get();
+			var cfg = ConfigManager.get();
 			cfg.showEvolvedProgressBar = !cfg.showEvolvedProgressBar;
 			b.setMessage(currentLabel());
 			ConfigManager.save();
-		}).dimensions(cx - 100, cy - 56, 200, 20).build();
+		}).dimensions(cx - w/2, y, w, h).build();
 		addDrawableChild(evotoggleBtn);
+		y += step;
 
+		// Small Hand
+		smallHandBtn = ButtonWidget.builder(smallHandLabel(), b -> {
+			var cfg = ConfigManager.get();
+			cfg.smallHand = !cfg.smallHand;
+			b.setMessage(smallHandLabel());
+			ConfigManager.save();
+		}).dimensions(cx - w/2, y, w, h).build();
+		addDrawableChild(smallHandBtn);
+		y += step + 6;
+
+		// --- Event Notifications
 		eventsHeader = ButtonWidget.builder(Text.literal("— Event Notifications —"), btn -> {})
-				.dimensions(cx - 100, cy - 28, 200, 20).build();
+				.dimensions(cx - w/2, y, w, h).build();
 		eventsHeader.active = false;
 		addDrawableChild(eventsHeader);
+		y += step;
 
+		// Crab Rave
 		crabBtn = ButtonWidget.builder(crabLabel(), b -> {
-			ConfigManager cfg = ConfigManager.get();
+			var cfg = ConfigManager.get();
 			cfg.notifyCrabRave = !cfg.notifyCrabRave;
 			b.setMessage(crabLabel());
 			ConfigManager.save();
-		}).dimensions(cx - 100, cy - 4, 200, 20).build();
+		}).dimensions(cx - w/2, y, w, h).build();
 		addDrawableChild(crabBtn);
+		y += step;
 
+		// Envoy
 		envoyBtn = ButtonWidget.builder(envoyLabel(), b -> {
-			ConfigManager cfg = ConfigManager.get();
+			var cfg = ConfigManager.get();
 			cfg.notifyEnvoy = !cfg.notifyEnvoy;
 			b.setMessage(envoyLabel());
 			ConfigManager.save();
-		}).dimensions(cx - 100, cy + 20, 200, 20).build();
+		}).dimensions(cx - w/2, y, w, h).build();
 		addDrawableChild(envoyBtn);
+		y += step;
 
+		// Chat Events
 		chatBtn = ButtonWidget.builder(chatLabel(), b -> {
-			ConfigManager cfg = ConfigManager.get();
+			var cfg = ConfigManager.get();
 			cfg.notifyChatEvents = !cfg.notifyChatEvents;
 			b.setMessage(chatLabel());
 			ConfigManager.save();
-		}).dimensions(cx - 100, cy + 44, 200, 20).build();
+		}).dimensions(cx - w/2, y, w, h).build();
 		addDrawableChild(chatBtn);
 
-		int pad = 12, w = 200, h = 20;
-		int x = (this.width - w) / 2;
-		int y = this.height - h - pad;
-
+		// Done
+		int pad = 12;
+		int dx = (this.width - w) / 2;
+		int dy = this.height - h - pad;
 		doneBtn = ButtonWidget.builder(Text.literal("Done"), b -> close())
-				.dimensions(x, y, w, h).build();
+				.dimensions(dx, dy, w, h).build();
 		addDrawableChild(doneBtn);
+	}
+
+	private Text smallHandLabel() {
+		return Text.literal("Small Hand: " + (ConfigManager.get().smallHand ? "ON" : "OFF"));
 	}
 
 	private Text currentLabel() {
@@ -98,6 +129,6 @@ public class ConfigScreen extends Screen {
 	public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
 		this.renderBackground(ctx, mouseX, mouseY, delta);
 		super.render(ctx, mouseX, mouseY, delta);
-		ctx.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, this.height / 2 - 80, 0xFFFFFF);
+		ctx.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 12, 0xFFFFFF);
 	}
 }
