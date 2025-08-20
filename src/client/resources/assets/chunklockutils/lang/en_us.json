@@ -1,4 +1,5 @@
 {
   "key.categories.chunklockutils": "ChunklockUtils",
-  "key.chunklockutils.config": "Open Settings"
+  "key.chunklockutils.config": "Open settings",
+  "key.chunklockutils.toggle_hide_items": "Hide dropped items"
 }

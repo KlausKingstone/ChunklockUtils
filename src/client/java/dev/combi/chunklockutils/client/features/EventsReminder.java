@@ -17,8 +17,8 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 public final class EventsReminder {
-	// EST, fixed offset (no DST)
-	private static final ZoneId ZONE_EST = ZoneOffset.ofHours(-5);
+	// EST, fixed offset (no DST) + 1h to compensate for server time
+	private static final ZoneId ZONE_EST = ZoneOffset.ofHours(-4);
 
 	private static final long PERIOD_MS = Duration.ofHours(3).toMillis(); // 3h block
 	private static final int  CRAB_MINUTE  = 4;   // hh:04
@@ -131,7 +131,7 @@ public final class EventsReminder {
 						.append(Text.literal("ChunklockUtils")
 								.styled(s -> s.withBold(true).withColor(0x00FFC8)))
 						.append(Text.literal("] "))
-						.append(Text.literal(msg).styled(s -> s.withColor(0xAAAAAA))),
+						.append(Text.literal(msg).styled(s -> s.withColor(0xDADADA))),
 				false
 		);
 		client.execute(() -> client.player.playSound(SoundEvents.BLOCK_BELL_USE, 1f, 1f));

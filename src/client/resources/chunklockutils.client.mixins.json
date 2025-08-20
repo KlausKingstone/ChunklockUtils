@@ -6,7 +6,8 @@
   "client": [
     "HandledScreenAccessor",
     "HandledScreenMixin",
-    "HeldItemRendererMixin"
+    "HeldItemRendererMixin",
+    "ItemEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -88,7 +88,7 @@ public final class UpdateChecker {
 				.append(Text.literal("ChunklockUtils")
 						.styled(s -> s.withBold(true).withColor(0x00FFC8)))
 				.append(Text.literal("] "))
-				.append(Text.literal("Update available ").styled(s -> s.withColor(0xAAAAAA)))
+				.append(Text.literal("Update available ").styled(s -> s.withColor(0xDADADA)))
 				.append(Text.literal("v" + latest)
 						.styled(s -> s.withBold(true).withColor(0x55FF55)))
 				.append(Text.literal("  •  ").styled(s -> s.withColor(0x777777)))

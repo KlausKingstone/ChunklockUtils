@@ -18,6 +18,7 @@ public final class ConfigManager {
 
 	public boolean showEvolvedProgressBar = true;
 	public boolean smallHand = false;
+	public boolean hideDroppedItems = false;
 
 	private ConfigManager() {}
 
@@ -33,6 +34,9 @@ public final class ConfigManager {
 			}
 		} catch (Exception ignored) {}
 		if (INSTANCE == null) INSTANCE = new ConfigManager();
+
+		INSTANCE.hideDroppedItems = false; // Reset this option on restart
+		save();
 	}
 
 	public static void save() {
