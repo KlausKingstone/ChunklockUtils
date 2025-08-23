@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public final class EvolvingTooltip {
 	public static void rewriteTooltip(ItemStack stack, List<Text> lines) {
-		// Only check Evolving tools
-		if (!stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolving")) return;
+		// Only check evolving tools
+		if (!stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolving") && !stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolved")) return;
 
 		Optional<Double> scalableOpt = getScalableValue(stack);
 		if (scalableOpt.isEmpty()) return;
@@ -92,7 +92,6 @@ public final class EvolvingTooltip {
 	}
 
 	private static double parseNumber(String s) {
-		// tolerate "1,234" and "1234"
 		String t = s.replace(",", "").trim();
 		try { return Double.parseDouble(t); } catch (Exception e) { return 0; }
 	}

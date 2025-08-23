@@ -1,5 +1,6 @@
 package dev.combi.chunklockutils.client;
 
+import dev.combi.chunklockutils.client.commands.PrintNbtCommand;
 import dev.combi.chunklockutils.client.config.ConfigManager;
 import dev.combi.chunklockutils.client.config.ConfigScreen;
 import dev.combi.chunklockutils.client.features.EventsReminder;
@@ -33,7 +34,7 @@ public class ChunklockutilsClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		// Check if there are updates available
+		// Update checker
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
 				UpdateChecker.checkAsync(client, MODID, GITHUB_OWNER, GITHUB_REPO));
 
@@ -53,7 +54,7 @@ public class ChunklockutilsClient implements ClientModInitializer {
 			}
 		});
 
-		// Fix the Evolving tools
+		// Fix evolving tools
 		ItemTooltipCallback.EVENT.register((stack, ctx, type, lines) -> {
 			EvolvingTooltip.rewriteTooltip(stack, lines);
 		});
@@ -61,7 +62,10 @@ public class ChunklockutilsClient implements ClientModInitializer {
 		// Add event notifications
 		EventsReminder.init();
 
-		// Add progress bar to Evolving tools
+		// Register commands
+		PrintNbtCommand.init();
+
+		// Add progress bar to evolving tools
 		HudRenderCallback.EVENT.register(EvolvingProgressBar::renderHotbar);
 
 		// Hide dropped items keybind

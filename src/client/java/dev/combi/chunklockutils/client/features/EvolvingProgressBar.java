@@ -96,7 +96,7 @@ public final class EvolvingProgressBar {
 	}
 
 	private static boolean isEvolving(ItemStack stack) {
-		return stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolving");
+		return stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolving") || stack.getName().getString().toLowerCase(Locale.ROOT).contains("evolved");
 	}
 
 	private static Optional<Double> readScalable(ItemStack stack) {

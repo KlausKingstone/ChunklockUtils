@@ -17,8 +17,8 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 public final class EventsReminder {
-	// EST, fixed offset (no DST) + 1h to compensate for server time
-	private static final ZoneId ZONE_EST = ZoneOffset.ofHours(-4);
+	// EST, fixed offset (no DST) - 1h to compensate for server time
+	private static final ZoneId ZONE_EST = ZoneOffset.ofHours(-6);
 
 	private static final long PERIOD_MS = Duration.ofHours(3).toMillis(); // 3h block
 	private static final int  CRAB_MINUTE  = 4;   // hh:04
@@ -84,7 +84,7 @@ public final class EventsReminder {
 
 		boolean isMarkMinute = ((minute + 1) % 15) == 0;
 
-		if (isMarkMinute && second >= 50 && lastChatEpochMinute != epochMinute) {
+		if (isMarkMinute && second >= 53 && lastChatEpochMinute != epochMinute) {
 			lastChatEpochMinute = epochMinute;
 			notify(client, "Chat Event starting in 10 seconds!");
 			save();
