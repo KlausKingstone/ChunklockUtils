@@ -1,5 +1,6 @@
 package dev.combi.chunklockutils.client;
 
+import dev.combi.chunklockutils.client.commands.LogCustomEntitiesCommand;
 import dev.combi.chunklockutils.client.commands.PrintNbtCommand;
 import dev.combi.chunklockutils.client.config.ConfigManager;
 import dev.combi.chunklockutils.client.config.ConfigScreen;
@@ -64,6 +65,7 @@ public class ChunklockutilsClient implements ClientModInitializer {
 
 		// Register commands
 		PrintNbtCommand.init();
+		LogCustomEntitiesCommand.init();
 
 		// Add progress bar to evolving tools
 		HudRenderCallback.EVENT.register(EvolvingProgressBar::renderHotbar);
