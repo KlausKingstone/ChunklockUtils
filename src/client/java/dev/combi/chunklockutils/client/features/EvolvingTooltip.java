@@ -44,7 +44,7 @@ public final class EvolvingTooltip {
 			String firstNew = formatNumber(scalable);
 
 			String oldNum = plain.substring(firstStart, firstEnd);
-			lines.set(i, TextReplace.replaceFirstPreservingStyle(line, oldNum, firstNew));
+			lines.set(i, TextReplace.replaceFirstPreservingStyle(line, oldNum + "/", firstNew + "/"));
 			return;
 		}
 	}
