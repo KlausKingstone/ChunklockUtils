@@ -7,6 +7,7 @@ import dev.combi.chunklockutils.client.config.ConfigScreen;
 import dev.combi.chunklockutils.client.features.EventsReminder;
 import dev.combi.chunklockutils.client.features.EvolvingProgressBar;
 import dev.combi.chunklockutils.client.features.EvolvingTooltip;
+import dev.combi.chunklockutils.client.features.MissingRankItems;
 import dev.combi.chunklockutils.client.misc.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -16,6 +17,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.sound.SoundEvents;
@@ -32,6 +34,8 @@ public class ChunklockutilsClient implements ClientModInitializer {
 
 	private static KeyBinding openConfig;
 	private static KeyBinding toggleHideItems;
+
+	private Screen lastScreen = null;
 
 	@Override
 	public void onInitializeClient() {
@@ -66,6 +70,9 @@ public class ChunklockutilsClient implements ClientModInitializer {
 		// Register commands
 		PrintNbtCommand.init();
 		LogCustomEntitiesCommand.init();
+
+		// Register rank progress feature
+		MissingRankItems.register();
 
 		// Add progress bar to evolving tools
 		HudRenderCallback.EVENT.register(EvolvingProgressBar::renderHotbar);

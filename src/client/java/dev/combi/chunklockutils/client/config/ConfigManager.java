@@ -20,6 +20,9 @@ public final class ConfigManager {
 	public boolean smallHand = false;
 	public boolean hideDroppedItems = false;
 
+	/* ==== GUIS ==== */
+	public boolean showRankMenu = true;
+
 	private ConfigManager() {}
 
 	public static ConfigManager get() {

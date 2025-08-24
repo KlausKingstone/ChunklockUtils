@@ -9,11 +9,15 @@ import net.minecraft.text.Text;
 public class ConfigScreen extends Screen {
 	private final Screen parent;
 	private ButtonWidget evotoggleBtn;
-	private ButtonWidget smallHandBtn;  // NEW
+	private ButtonWidget smallHandBtn;
 	private ButtonWidget crabBtn;
 	private ButtonWidget envoyBtn;
 	private ButtonWidget chatBtn;
+
 	private ButtonWidget eventsHeader;
+	private ButtonWidget rankHeader;   // NEW
+	private ButtonWidget rankBtn;      // NEW
+
 	private ButtonWidget doneBtn;
 
 	public ConfigScreen(Screen parent) {
@@ -29,7 +33,7 @@ public class ConfigScreen extends Screen {
 		int gap  = 6;
 		int step = h + gap;
 
-		int top  = Math.max(24, this.height / 2 - 90);
+		int top  = Math.max(24, this.height / 2 - 110);
 		int y    = top;
 
 		// --- General ---
@@ -88,6 +92,24 @@ public class ConfigScreen extends Screen {
 			ConfigManager.save();
 		}).dimensions(cx - w/2, y, w, h).build();
 		addDrawableChild(chatBtn);
+		y += step + 6;
+
+		rankHeader = ButtonWidget.builder(Text.literal("— GUI —"), btn -> {})
+				.dimensions(cx - w/2, y, w, h).build();
+		rankHeader.active = false;
+		addDrawableChild(rankHeader);
+		y += step;
+
+		// Rank items GUI
+		rankBtn = ButtonWidget.builder(rankLabel(), b -> {
+			var cfg = ConfigManager.get();
+			cfg.showRankMenu = !cfg.showRankMenu;
+			b.setMessage(rankLabel());
+			ConfigManager.save();
+
+		}).dimensions(cx - w/2, y, w, h).build();
+		addDrawableChild(rankBtn);
+		y += step;
 
 		// Done
 		int pad = 12;
@@ -114,9 +136,12 @@ public class ConfigScreen extends Screen {
 		return Text.literal("Envoy: "
 				+ (ConfigManager.get().notifyEnvoy ? "ON" : "OFF"));
 	}
-
 	private Text chatLabel() {
 		return Text.literal("Chat Events: " + (ConfigManager.get().notifyChatEvents ? "ON" : "OFF"));
+	}
+
+	private Text rankLabel() {
+		return Text.literal("Missing Rank Items: " + (ConfigManager.get().showRankMenu ? "ON" : "OFF"));
 	}
 
 	@Override
